@@ -2,7 +2,7 @@
 
 class dbConnected
 {
-    private $dsn = 'mysql:host=localhost;dbname=project_uv_db1;charset=utf8';
+    private $dsn = 'mysql:host=localhost;dbname=blog;charset=utf8';
     private $user = "root";
     private $pass = "";
     private $conn;
