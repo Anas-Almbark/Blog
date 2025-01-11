@@ -287,7 +287,63 @@
             </li>
           </ul>
         </nav>
-        <div class="main-panel" style="background-color: #e8eff9"></div>
+        <div class="main-panel py-5" style="background-color: #e8eff9">
+          <div class="col-12 w-75 m-auto grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Add new blog</h4>
+                <form
+                  action="http://localhost/Blog/back-end/blog.php"
+                  method="post"
+                  class="forms-sample"
+                >
+                  <div class="form-group">
+                    <label for="exampleInputName1">Title</label>
+                    <input
+                      name="title"
+                      type="text"
+                      class="form-control"
+                      id="exampleInputName1"
+                      placeholder="title of blog"
+                    />
+                  </div>
+                  <div class="form-group w-100">
+                    <select
+                      name="category_id"
+                      class="form-select w-100 p-2"
+                      aria-label="multiple select example"
+                      id="select_category"
+                    >
+                      <option selected>Open this select menu</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleTextarea1">Textarea</label>
+                    <textarea
+                      name="content"
+                      class="form-control"
+                      id="exampleTextarea1"
+                      rows="4"
+                      placeholder="content of blog"
+                    ></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>File upload</label>
+                    <input type="file" name="image" />
+                  </div>
+                  <button
+                    type="submit"
+                    name="submit"
+                    class="btn btn-primary mr-2"
+                  >
+                    Submit
+                  </button>
+                  <button class="btn btn-light">Cancel</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script src="../../vendors/js/vendor.bundle.base.js"></script>
@@ -299,5 +355,21 @@
     <script src="../../vendors/progressbar.js/progressbar.min.js"></script>
     <script src="../../vendors/chart.js/Chart.min.js"></script>
     <script src="../js/dashboard.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost/Blog/back-end/category.php?getCategories=true")
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.getElementById("select_category");
+            data.forEach((category) => {
+              const option = document.createElement("option");
+              option.value = category.id;
+              option.innerText = category.name;
+              container.appendChild(option);
+            });
+          })
+          .catch((error) => console.error("Error fetching categories:", error));
+      });
+    </script>
   </body>
 </html>

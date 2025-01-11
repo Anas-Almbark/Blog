@@ -185,10 +185,15 @@
                   <i class="typcn typcn-cog text-primary"></i>
                   Settings
                 </a>
-                <a class="dropdown-item">
-                  <i class="typcn typcn-power text-primary"></i>
-                  Logout
-                </a>
+                <form
+                  action="http://localhost/Blog/back-end/logout.php"
+                  method="post"
+                >
+                  <button type="submit" name="logout" class="dropdown-item">
+                    <i class="typcn typcn-power text-primary"></i>
+                    Logout
+                  </button>
+                </form>
               </div>
             </li>
           </ul>
@@ -280,6 +285,12 @@
               <a class="nav-link" href="./categories/categories.html">
                 <i class="typcn typcn-chart-bar menu-icon"></i>
                 <span class="menu-title"> Categories</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./admin.html">
+                <i class="typcn typcn-chart-bar menu-icon"></i>
+                <span class="menu-title"> add admin</span>
               </a>
             </li>
           </ul>
