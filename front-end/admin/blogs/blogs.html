@@ -12,9 +12,9 @@
       href="../../vendors/typicons.font/font/typicons.css"
     />
     <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
-    <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
-    <link rel="stylesheet" href="../css/vertical-layout-light/blogs.css" />
+    <link rel="stylesheet" href="../../css/vertical-layout-light/blogs.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -279,10 +279,15 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./blogs.html">
-                <i class="typcn typcn-chart-area-outline menu-icon"></i>
-                <span class="menu-title"> Blogs </span>
-              </a>
+              <form
+                action="http://localhost/Blog/back-end/blog.php"
+                method="get"
+              >
+                <a class="nav-link" href="./blogs.html?getBlogs=true">
+                  <i class="typcn typcn-chart-area-outline menu-icon"></i>
+                  <span class="menu-title"> Blogs </span>
+                </a>
+              </form>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../categories/categories.html">
@@ -304,79 +309,10 @@
               <button type="button" class="btn btn-success">add blog</button>
             </a>
           </div>
-          <div class="grid-container mx-4">
-            <div class="card">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="..." class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">
-                      This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </p>
-                    <p class="card-text">
-                      <small class="text-muted">Last updated 3 mins ago</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer d-flex align-items-center actions">
-                <form action="" method="post">
-                  <button class="btn btn-warning">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                  </button>
-                </form>
-                <form action="" method="post">
-                  <button class="btn btn-danger mx-4">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="..." class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">
-                      This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </p>
-                    <p class="card-text">
-                      <small class="text-muted">Last updated 3 mins ago</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="..." class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">
-                      This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </p>
-                    <p class="card-text">
-                      <small class="text-muted">Last updated 3 mins ago</small>
-                    </p>
-                  </div>
-                </div>
+          <div class="content-wrapper">
+            <div class="container">
+              <div class="row" id="box-blogs">
+                <!-- Blogs will be loaded here -->
               </div>
             </div>
           </div>
@@ -392,5 +328,62 @@
     <script src="../../vendors/progressbar.js/progressbar.min.js"></script>
     <script src="../../vendors/chart.js/Chart.min.js"></script>
     <script src="../js/dashboard.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost/Blog/back-end/blog.php?getBlogs=true")
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.getElementById("box-blogs");
+            data.forEach((blog, i) => {
+              const card = document.createElement("div");
+              card.className = "col-md-4 mb-4";
+              const contentPreview =
+                blog.content.length > 50
+                  ? blog.content.substring(0, 50) + "..."
+                  : blog.content;
+              card.innerHTML = `
+                          <div class="card h-100">
+                              <div class="card-body d-flex flex-column">
+                                  <div class="d-flex align-items-center mb-3">
+                                      <img src="../../${
+                                        blog.img
+                                          ? blog.img
+                                          : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAhFBMVEXx8e9WV1lTVFZLS0zi4uLz9O+PkJL49/ZMTE+WmJft7evt7e1PUFNQUFHa2tj6+vhnaGvOzs5VV1dXWVhlZWXFxcVbW11ISEnf399QUlGTk5JhYmOsrKxxcXOJi4qfn5/Gx8e5ublpbGmBgoJ6enq2t7Rub3HS1NV0dHLLysy6u71LTkz9a0/cAAAEhUlEQVR4nO3bi26iQBQGYM4APYiMtNwUoV6q1u76/u+3Z7RdL1g1TYkj+b9kE1fQ9O+UOWdGcRwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuCO/BffOtMeDdvC9g33il8x13aAF2YsdGddlQmoviqJfeaAUkV7fO5wRLxU999qQUbK0YhAjSrgNMcsg9u+dToQRPcetvHP8bE3CrPMJuz+GSHjV+e6lEwn7Jhx7s3nuNetCJxIK35uosiz1wjs90omEMoKDVJF0MqSS9ckwdiRhvySicd0rVJqejGInEjo8jZI3TzoY741U73gQO5Gw36+oHGwfejpJjg92IqHjRfSxqxXxkobHf6bdSDjSarF7NU9oODo61o2EoaJs9yiuyH2wMeR1o8KdOWlJujYvj1fBaQdve0LO9fv1V3M+pGgaOmFdUvD3oeZSrl0qF9e3y/gpoDKtkjINFo9T8SVXfxKkskQfX9+F4N7GbMkod3x6xOKE0ku/RzKC6vMau4xfJm9VNmnuq1mckNeFouEqroPCzW/YS4qd0Dlzmr0J+W9AKpUxiceaNj/f87Q2IU8D0h+79d4iomLw03e2NuFCk144ZnUr/94VFeEP39nKhL7vZSW50/9/mWFB6vXqj/lAuxj8kiaJPpxdBoWM6M8uRRsTxitNqjhaq/svrpTFyzWD17NzJ1iYkHsyx7z2j0dM+rIiqC+NorQ/w3NFxbqEft/MMZPGCVzrRst5eNhbRkTlvDmKtiVkr1LkmsE6nTf8XlDo78pinJOiSKWble09DedmJGZnc7CUxWjUnDF93w+f3CRJc2kNhnP2dyXmi0UJZV3HsvpR2befS0tZzLxmTeB1JgP44fk80bvxP2RVQh678pN+X9q9itRH41mug2QXrG/eIKjtXQE7r7J+vbhSGlGjLMoUI7+WasDbFGYePugUDJsSPiu6XBCkFZCF7tF+aJwn8qpx6H9eezyVmfgooj0JZalL0Z+LAf3tgmOz/y34znhDKsp5/62Z2HTsh72BPQkp1dmZj45OmG0NV8riNpGsICPaLI9fxfUmjZ7MU7tcFiVUi1uWD9zTRbDr6EwTIFPMaf2I600S7VsGixJWt+2XsvQ8NJI/2HApl1x1+lGTs40oXdHX8xYlvPmbCh+KqjDOtdSIxr7TVjwfFnr59R97Et685+1lUhZ7sv5I599ctzyXowvrrsNbE/rOSFo76WKW3rdfPOT5kKLX7cMHTGjKolyK+vJaauZ+bgs8ZEIpi8PszBRzdEouLe57+KgJJWL/Wuk0A62yh014buu3ccpaamzlPWrCW/AgTVQWvnc3oeMPFKnnDo+h8AolDX3Z4YTOqFId/wYte1XHx1DWUB0fw8eth7ezJ2HyFrdyB489Cc36sJWEFemffvb4m8xdEauR14JVRKkNd5RwHZB226C3m3M23ME2cctStWFjdqVsSOjMnsbjp983Np/zWHIXYiv3PbEN1yAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNU/a9tcIP2YuKgAAAAASUVORK5CYII="
+                                      }" class="img-thumbnail" style="width: 50px; height: 50px;" alt="img">
+                                      <h5 class="card-title mt-4 ml-3">${
+                                        blog.title
+                                      }</h5>
+                                  </div>
+                                  <p class="card-text flex-grow-1">${contentPreview}</p>
+                                  <span class="badge-info p-2 px-3 my-3" style="width:fit-content">${
+                                    blog.category_name
+                                  }</span>
+                                  <p class="card-text">
+                                      <small class="text-muted">${
+                                        blog.created_at
+                                      }</small>
+                                  </p>
+                                  <div class="mt-2 d-flex align-items-center actions">
+                                      <form action="" method="post">
+                                          <button class="btn text-warning">
+                                              <i class="fa-solid fa-pen-to-square"></i>
+                                          </button>
+                                      </form>
+                                      <form action="http://localhost/Blog/back-end/blog.php" method="post">
+                                          <button type='submit' name='deleteBlog' value=${
+                                            blog.id
+                                          } class="btn text-danger">
+                                              <i class="fa-solid fa-trash"></i>
+                                          </button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>`;
+              container.appendChild(card);
+            });
+          })
+          .catch((error) => console.error("Error fetching categories:", error));
+      });
+    </script>
   </body>
 </html>

@@ -12,7 +12,7 @@
       href="../../vendors/typicons.font/font/typicons.css"
     />
     <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
-    <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
   </head>
   <body>
@@ -285,6 +285,12 @@
                 <span class="menu-title"> Categories</span>
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../admin.html">
+                <i class="typcn typcn-chart-bar menu-icon"></i>
+                <span class="menu-title"> add admin</span>
+              </a>
+            </li>
           </ul>
         </nav>
         <div class="main-panel py-5" style="background-color: #e8eff9">
@@ -296,6 +302,7 @@
                   action="http://localhost/Blog/back-end/blog.php"
                   method="post"
                   class="forms-sample"
+                  enctype="multipart/form-data"
                 >
                   <div class="form-group">
                     <label for="exampleInputName1">Title</label>

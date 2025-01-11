@@ -17,41 +17,44 @@ class Blog extends dbConnected
     {
         session_start();
         parent::__construct();
-        $this->title = $_POST['title'];
-        $this->content = $_POST['content'];
-        $this->author_id = $_SESSION['admin']['id'];
-        $this->category_id = $_POST['category_id'];
-        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            $this->img = $this->uploadImage($_FILES['image']);
-        } else {
-            $this->img = "uploads/default.jpg";
-        }
-        $this->created_at = date('Y-m-d H:i:s');
-        $this->updated_at = date('Y-m-d H:i:s');
-    }
-
-    private function uploadImage($file)
-    {
-        $target_dir = "uploads/";
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-        $target_file = $target_dir . basename($file["name"]);
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        $check = getimagesize($file["tmp_name"]);
-
-        if ($check !== false) {
-            if (move_uploaded_file($file["tmp_name"], $target_file)) {
-                return $target_file;
+        if (isset($_POST['submit'])) {
+            $this->title = $_POST['title'];
+            $this->content = $_POST['content'];
+            $this->author_id = $_SESSION['admin']['id'];
+            $this->category_id = $_POST['category_id'];
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+                $this->img = $this->uploadImage();
             } else {
-                echo "Sorry, there was an error uploading your file.";
-                exit();
+                $this->img = "images/default.jpg";
             }
-        } else {
-            echo "File is not an image.";
+            $this->created_at = date('Y-m-d H:i:s');
+            $this->updated_at = date('Y-m-d H:i:s');
+        }
+
+        if (isset($_GET['getBlogs'])) {
+            header('Content-Type: application/json');
+            echo json_encode($this->getAllBlogs());
             exit();
         }
+        if (isset($_POST['deleteBlog'])) {
+            $this->deleteBlog($_POST['deleteBlog']);
+        }
     }
+
+    private function uploadImage()
+    {
+
+        $uploadDir = '../images/';
+        $uploadFile = $uploadDir . basename($_FILES['image']['name']);
+
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+            echo "success in upload";
+            return $uploadFile;
+        } else {
+            echo "error uploading";
+        }
+    }
+
 
     public function createBlog()
     {
@@ -82,9 +85,33 @@ class Blog extends dbConnected
             echo "Failed to create blog";
         }
     }
+
+
+    public function getAllBlogs()
+    {
+        $sql = SqlCommand::selectWithJoin("posts", "categories", "category_id", "posts.*, categories.name as category_name");
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function deleteBlog()
+    {
+        $sql = SqlCommand::delete("posts");
+        $query = $this->getConnection()->prepare($sql);
+        $res = $query->execute([$_POST['deleteBlog']]);
+        if ($res) {
+            echo "Blog deleted successfully";
+            header("Location: http://localhost/Blog/front-end/admin/blogs/blogs.html?getBlogs=true");
+        } else {
+            echo "Failed to delete blog";
+        }
+    }
 }
 
 if (isset($_POST['submit'])) {
     $blog = new Blog();
     $blog->createBlog();
 }
+
+new Blog();

@@ -12,9 +12,12 @@
       href="../../vendors/typicons.font/font/typicons.css"
     />
     <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
-    <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
-    <link rel="stylesheet" href="../css/vertical-layout-light/category.css" />
+    <link
+      rel="stylesheet"
+      href="../../css/vertical-layout-light/category.css"
+    />
 
     <link
       rel="stylesheet"
@@ -336,9 +339,9 @@
           .then((response) => response.json())
           .then((data) => {
             const container = document.getElementById("categories-container");
-            data.forEach((category) => {
+            data.forEach((category, i) => {
               const card = document.createElement("div");
-              card.className = "card border-primary";
+              card.className = "card mx-5 my-3 mb-5";
               card.style.maxWidth = "18rem";
               card.innerHTML = `
                           <div class="card-body text-primary">
@@ -346,12 +349,12 @@
                           </div>
                           <div class="card-footer d-flex align-items-center actions">
                               <form action="./updateCategory.html?name=${category.name}&id=${category.id}" method="post">
-                                  <button class="btn btn-warning">
+                                  <button class="btn text-warning">
                                       <i class="fa-solid fa-pen-to-square"></i>
                                   </button>
                               </form>
                               <form action="http://localhost/Blog/back-end/category.php" method="post">
-                                  <button type="submit" name="deleteCategory" value=${category.id} class="btn btn-danger mx-4">
+                                  <button type="submit" name="deleteCategory" value=${category.id} class="btn text-danger mx-4">
                                       <i class="fa-solid fa-trash"></i>
                                   </button>
                               </form>

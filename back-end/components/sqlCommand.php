@@ -44,4 +44,10 @@ class SqlCommand
         $sqlQuery = "SELECT id , email , password , role FROM $table1 WHERE email = $email UNION SELECT id , email , password , role FROM $table2 WHERE email = $email";
         return $sqlQuery;
     }
+
+    public static function selectWithJoin($table1, $table2, $foreignKey, $columns = "*")
+    {
+        $sqlQuery = "SELECT $columns FROM $table1 JOIN $table2 ON $table1.$foreignKey = $table2.id";
+        return $sqlQuery;
+    }
 }
