@@ -29,6 +29,7 @@ class Blog extends dbConnected
             }
             $this->created_at = date('Y-m-d H:i:s');
             $this->updated_at = date('Y-m-d H:i:s');
+            $this->createBlog();
         }
 
         if (isset($_GET['getBlogs'])) {
@@ -39,14 +40,31 @@ class Blog extends dbConnected
         if (isset($_POST['deleteBlog'])) {
             $this->deleteBlog($_POST['deleteBlog']);
         }
+
+        if (isset($_GET['id'])) {
+            header("Content-Type: application/json");
+            echo json_encode($this->getSingleBlog($_GET['id']));
+            exit();
+        }
+
+        if (isset($_POST['update'])) {
+            $this->title = $_POST['title'];
+            $this->content = $_POST['content'];
+            $this->category_id = $_POST['category_id'];
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+                $this->img = $this->uploadImage();
+            } else {
+                $this->img = $_POST["old_img"];
+            }
+            $this->updated_at = date("Y-m-d H:i:s");
+            $this->updateBlog();
+        }
     }
 
     private function uploadImage()
     {
-
         $uploadDir = '../images/';
         $uploadFile = $uploadDir . basename($_FILES['image']['name']);
-
         if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
             echo "success in upload";
             return $uploadFile;
@@ -107,11 +125,37 @@ class Blog extends dbConnected
             echo "Failed to delete blog";
         }
     }
-}
 
-if (isset($_POST['submit'])) {
-    $blog = new Blog();
-    $blog->createBlog();
+    public function getSingleBlog($id)
+    {
+        $sql = SqlCommand::selectWithJoinIf("posts", "categories", "category_id", "posts.*, categories.name as category_name");
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute([$id]);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateBlog()
+    {
+        $sql = SqlCommand::update("posts", [
+            "title",
+            "content",
+            "img",
+            "updated_at",
+            "category_id"
+        ]);
+        $query = $this->getConnection()->prepare($sql);
+        $result = $query->execute([
+            $this->title,
+            $this->content,
+            $this->img,
+            $this->updated_at,
+            $this->category_id,
+            $_POST['id']
+        ]);
+        if ($result) {
+            header("Location: http://localhost/Blog/front-end/admin/blogs/blogs.html");
+        }
+    }
 }
 
 new Blog();

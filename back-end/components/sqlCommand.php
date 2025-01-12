@@ -50,4 +50,9 @@ class SqlCommand
         $sqlQuery = "SELECT $columns FROM $table1 JOIN $table2 ON $table1.$foreignKey = $table2.id";
         return $sqlQuery;
     }
+    public static function selectWithJoinIf($table1, $table2, $foreignKey, $columns = "*")
+    {
+        $sqlQuery = "SELECT $columns FROM $table1 JOIN $table2 ON $table1.$foreignKey = $table2.id WHERE $table1.id = ?";
+        return $sqlQuery;
+    }
 }
