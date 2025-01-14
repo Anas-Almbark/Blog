@@ -14,12 +14,10 @@
     />
     <link
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
-      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-      crossorigin="anonymous"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" type="text/css" href="./styles.css" />
-    <title>Roundy - A Minimal Bootstrap Blogging Tempate</title>
+    <title>All Blogs</title>
   </head>
   <body>
     <div class="container-fluid" id="header">
@@ -46,13 +44,18 @@
           >
             <ul class="navbar-nav align-items-center">
               <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="./index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="./about.html">About</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">contact us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  >logout <i class="fa-solid fa-right-from-bracket"></i
+                ></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="./profile.html" id="profile">
@@ -73,7 +76,7 @@
       <div class="container" id="hero">
         <div class="row justify-content-end">
           <div class="col-lg-6 hero-img-container">
-            <a href="./single.html">
+            <a href="./single.html" id="hero_link">
               <div class="">
                 <img
                   class="rounded-circle"
@@ -87,11 +90,9 @@
 
           <div class="col-lg-9">
             <div class="hero-title">
-              <a href="./single.html">
-                <h1 id="hero_title">
-                  To theory equation, more have the or to was the
-                </h1>
-              </a>
+              <h1 id="hero_title">
+                To theory equation, more have the or to was the
+              </h1>
             </div>
           </div>
 
@@ -116,10 +117,10 @@
     <!-- More articles button -->
 
     <div class="container text-center pb-3 mb-5">
-      <a href="#" class="btn btn-lg btn-light">More Articles</a>
+      <a href="#" id="loadMoreBtn" class="btn btn-lg btn-light"
+        >More Articles</a
+      >
     </div>
-
-    <!-- Footer section  -->
 
     <footer class="container-fluid mt-1 p-4">
       <div class="container">
@@ -209,43 +210,5 @@
       );
     });
   </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("http://localhost/Blog/back-end/blog.php?getBlogs=true")
-        .then((response) => response.json())
-        .then((data) => {
-          let hero_data = data[Math.floor(Math.random() * data.length)];
-          document.getElementById("hero_img").src = `../${hero_data.img}`;
-          document.getElementById("hero_title").innerHTML = hero_data.title;
-          document.getElementById("hero_content").innerHTML =
-            hero_data.content.substring(0, 50) + "...";
-
-          const container = document.getElementById("box-blogs");
-          data.forEach((blog, i) => {
-            const card = document.createElement("div");
-            card.className = "col-xl-6 col-lg-12 text-center";
-            const contentPreview =
-              blog.content.length > 50
-                ? blog.content.substring(0, 50) + "..."
-                : blog.content;
-            card.innerHTML = `
-                  <a href="./single.html?id=${blog.id}">
-                    <div class="article-card d-flex justify-content-center align-items-center">
-                      <div class="article-meta">
-                        <img src="../${blog.img}" class="rounded-circle" width="150" height="150"/>
-                      </div>
-
-                      <div class="article-meta text-left">
-                        <h2>${blog.title}</h2>
-                        <p> ${contentPreview} </p>
-                      </div>
-                    </div>
-                  </a>
-                `;
-            container.appendChild(card);
-          });
-        })
-        .catch((error) => console.error("Error fetching categories:", error));
-    });
-  </script>
+  <script src="./js/home.js"></script>
 </html>
