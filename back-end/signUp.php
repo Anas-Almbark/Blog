@@ -33,7 +33,10 @@ class SignUp extends dbConnected
         if (dataValidator::validateUser([$this->name, $this->email, $this->password, $this->confirmPassword])) {
             $sql = SqlCommand::insert('users', ['name', 'email', 'password', 'photo', 'role', 'created_at']);
             $query = $this->getConnection()->prepare($sql);
-            $query->execute([$this->name, $this->email, password_hash($this->password, PASSWORD_DEFAULT), $this->photo, $this->role, $this->created_at]);
+            $res = $query->execute([$this->name, $this->email, password_hash($this->password, PASSWORD_DEFAULT), $this->photo, $this->role, $this->created_at]);
+            if ($res) {
+                header("location: http://localhost/Blog/front-end/user/login.html");
+            }
         }
     }
 }

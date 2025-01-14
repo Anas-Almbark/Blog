@@ -38,4 +38,31 @@ class dataValidator extends dbConnected
 
         return true;
     }
+
+    public static function validatePass($data)
+    {
+        list($hashPass, $oldPass, $newPass, $confirmPass) = $data;
+        $errors = [];
+
+        if (empty($oldPass)) {
+            $errors[] = "Old password is required";
+        } elseif (!password_verify($oldPass, $hashPass)) {
+            $errors[] = "Old password is incorrect";
+        }
+
+        if (empty($newPass)) {
+            $errors[] = "New password is required";
+        } elseif (strlen($newPass) < 8) {
+            $errors[] = "Password must be at least 8 characters long";
+        } elseif ($newPass === $oldPass) {
+            $errors[] = "New password must be different from the old password";
+        }
+
+        if (empty($confirmPass)) {
+            $errors[] = "Confirm password is required";
+        } elseif ($newPass !== $confirmPass) {
+            $errors[] = "New password and confirm password do not match";
+        }
+        return empty($errors);
+    }
 }
