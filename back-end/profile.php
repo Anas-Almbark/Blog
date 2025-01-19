@@ -88,6 +88,7 @@ class Profile extends dbConnected
 
         if ($res) {
             echo "success";
+            header("Location: http://localhost/Blog/front-end/user/profile.html?id=$this->id");
         } else {
             echo "Failed to update profile";
         }

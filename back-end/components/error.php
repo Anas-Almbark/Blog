@@ -1,14 +1,16 @@
 <?php
 $errors = [];
-function getAllErrors()
+function setError($errorKey, $error)
 {
-    if (isset($_GET['errors'])) {
-        $errors = json_decode($_GET['errors'], true);
-        return $errors;
-    }
-    return [];
+    array_push($error, [$errorKey, $error]);
 }
 
-header('Content-Type: application/json');
-echo json_encode(['errors' => getAllErrors()]);
-exit();
+function getAllErrors()
+{
+    global $errors;
+    header('Content-Type: application/json');
+    $errors = json_encode($errors);
+    return $errors;
+}
+
+echo getAllErrors();

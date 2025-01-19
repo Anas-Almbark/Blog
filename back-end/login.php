@@ -2,6 +2,7 @@
 
 require_once './components/dbConnected.php';
 require_once './components/sqlCommand.php';
+require_once './components/error.php';
 class Login extends dbConnected
 {
     private $email;
@@ -37,7 +38,7 @@ class Login extends dbConnected
                         exit;
                     }
                 } else {
-                    echo "Password is incorrect";
+                    echo "invalid password";
                 }
             } else {
                 echo "User not found";
